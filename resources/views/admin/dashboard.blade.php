@@ -4,9 +4,11 @@
     <style>
         .chart-container {
             position: relative;
-            height: 400px;
+            height: 450px;
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            overflow: visible;
+            min-height: 450px;
         }
         .chart-row {
             display: flex;
@@ -23,7 +25,7 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            padding: 20px;
+            padding: 20px 20px 40px 20px;
             height: 100%;
         }
         .chart-title {
@@ -32,10 +34,13 @@
             margin-bottom: 15px;
             color: #333;
         }
-        canvas {
-            max-height: 350px;
+        .highcharts-container {
             width: 100% !important;
-            height: 350px !important;
+            height: 400px !important;
+            overflow: visible !important;
+        }
+        .highcharts-axis-labels {
+            overflow: visible !important;
         }
         @media (max-width: 768px) {
             .chart-col {
@@ -49,48 +54,38 @@
 @section('content')
 <div class="page-content container-fluid">
     <h1 class="page-title">
-        <i class="voyager-dashboard"></i> แดชบอร์ดข้อมูลจาก Customer
+        <i class="voyager-dashboard"></i> Customer Feedback Report
     </h1>
     
     <div class="chart-row">
         <div class="chart-col">
             <div class="chart-card">
                 <div class="chart-title">การกระจายตามช่วงอายุ</div>
-                <div class="chart-container">
-                    <canvas id="ageChart"></canvas>
-                </div>
+                <div class="chart-container" id="ageChart"></div>
             </div>
         </div>
         <div class="chart-col">
             <div class="chart-card">
-                <div class="chart-title">การกระจายตามเพศ</div>
-                <div class="chart-container">
-                    <canvas id="genderChart"></canvas>
-                </div>
+                <div class="chart-title">สัดส่วนลูกค้าตามเพศ</div>
+                <div class="chart-container" id="genderChart"></div>
             </div>
         </div>
         <div class="chart-col">
             <div class="chart-card">
                 <div class="chart-title">การกระจายตามอาชีพ</div>
-                <div class="chart-container">
-                    <canvas id="occupationChart"></canvas>
-                </div>
+                <div class="chart-container" id="occupationChart"></div>
             </div>
         </div>
         <div class="chart-col">
             <div class="chart-card">
                 <div class="chart-title">การกระจายตามรายได้</div>
-                <div class="chart-container">
-                    <canvas id="incomeChart"></canvas>
-                </div>
+                <div class="chart-container" id="incomeChart"></div>
             </div>
         </div>
         <div class="chart-col">
             <div class="chart-card">
                 <div class="chart-title">ความคิดเห็น</div>
-                <div class="chart-container">
-                    <canvas id="feedbackChart"></canvas>
-                </div>
+                <div class="chart-container" id="feedbackChart"></div>
             </div>
         </div>
     </div>
@@ -98,165 +93,233 @@
 @endsection
 
 @section('javascript')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // ตั้งค่าทั่วไปสำหรับ Chart.js
-            Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif';
-            Chart.defaults.responsive = true;
-            Chart.defaults.maintainAspectRatio = false;
-            
             // Age Distribution Chart
-            const ageCtx = document.getElementById('ageChart').getContext('2d');
-            new Chart(ageCtx, {
-                type: 'bar',
-                data: {
-                    labels: @json($ageGroups['labels']),
-                    datasets: [{
-                        label: 'จำนวนคนตามช่วงอายุ',
-                        data: @json($ageGroups['data']),
-                        backgroundColor: [
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(255, 159, 64, 0.8)',
-                            'rgba(153, 102, 255, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 159, 64, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('ageChart', {
+                chart: {
+                    type: 'column',
+                    marginBottom: 80,
+                    spacingBottom: 30
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    categories: @json($ageGroups['labels']),
+                    crosshair: true,
+                    labels: {
+                        rotation: 0,
+                        style: {
+                            fontSize: '12px',
+                            textOverflow: 'none',
+                            width: 'auto'
+                        },
+                        y: 30,
+                        autoRotation: false,
+                        reserveSpace: true
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                    tickLength: 5,
+                    lineWidth: 1,
+                    offset: 5,
+                    visible: true
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'จำนวนคน'
                     }
+                },
+                tooltip: {
+                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y} คน</b></td></tr>',
+                    footerFormat: '</table>',
+                    shared: true,
+                    useHTML: true
+                },
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                        colorByPoint: true,
+                        colors: ['#4285F4', '#34A853', '#FBBC05', '#EA4335']
+                    }
+                },
+                series: [{
+                    name: 'ช่วงอายุ',
+                    data: @json($ageGroups['data']),
+                    showInLegend: false
+                }],
+                credits: {
+                    enabled: false
                 }
             });
             
             // Gender Distribution Chart
-            const genderCtx = document.getElementById('genderChart').getContext('2d');
-            new Chart(genderCtx, {
-                type: 'pie',
-                data: {
-                    labels: @json($genderDistribution['labels']),
-                    datasets: [{
-                        data: @json($genderDistribution['data']),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('genderChart', {
+                chart: {
+                    type: 'pie',
+                    marginBottom: 30
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
+                title: {
+                    text: null
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        colors: ['#FF69B4', '#4285F4'],
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'เพศ',
+                    colorByPoint: true,
+                    data: @json($genderDistribution['labels']).map((label, index) => ({
+                        name: label,
+                        y: @json($genderDistribution['data'])[index]
+                    }))
+                }],
+                credits: {
+                    enabled: false
                 }
             });
             
             // Occupation Distribution Chart
-            const occupationCtx = document.getElementById('occupationChart').getContext('2d');
-            new Chart(occupationCtx, {
-                type: 'bar',
-                data: {
-                    labels: @json($occupationDistribution['labels']),
-                    datasets: [{
-                        label: 'จำนวนคนตามอาชีพ',
-                        data: @json($occupationDistribution['data']),
-                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('occupationChart', {
+                chart: {
+                    type: 'bar',
+                    marginLeft: 120,
+                    spacingLeft: 20
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
+                title: {
+                    text: null
+                },
+                xAxis: {
+                    categories: @json($occupationDistribution['labels']),
+                    title: {
+                        text: null
                     },
-                    scales: {
-                        y: {
-                            beginAtZero: true
+                    labels: {
+                        style: {
+                            fontSize: '12px'
                         }
                     }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'จำนวนคน',
+                        align: 'high'
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.y} คน</b>'
+                },
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            enabled: true
+                        },
+                        colorByPoint: true,
+                        pointWidth: 20
+                    }
+                },
+                series: [{
+                    name: 'อาชีพ',
+                    data: @json($occupationDistribution['data']),
+                    showInLegend: false
+                }],
+                credits: {
+                    enabled: false
                 }
             });
             
             // Income Distribution Chart
-            const incomeCtx = document.getElementById('incomeChart').getContext('2d');
-            new Chart(incomeCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: @json($incomeDistribution['labels']),
-                    datasets: [{
-                        data: @json($incomeDistribution['data']),
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)',
-                            'rgba(255, 206, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(153, 102, 255, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(153, 102, 255, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('incomeChart', {
+                chart: {
+                    type: 'pie',
+                    marginBottom: 30
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
+                title: {
+                    text: null
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        innerSize: '60%',
+                        depth: 45,
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'รายได้',
+                    colorByPoint: true,
+                    data: @json($incomeDistribution['labels']).map((label, index) => ({
+                        name: label,
+                        y: @json($incomeDistribution['data'])[index]
+                    }))
+                }],
+                credits: {
+                    enabled: false
                 }
             });
             
             // Feedback Distribution Chart
-            const feedbackCtx = document.getElementById('feedbackChart').getContext('2d');
-            new Chart(feedbackCtx, {
-                type: 'pie',
-                data: {
-                    labels: @json($feedbackDistribution['labels']),
-                    datasets: [{
-                        data: @json($feedbackDistribution['data']),
-                        backgroundColor: [
-                            'rgba(75, 192, 192, 0.8)',
-                            'rgba(255, 99, 132, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(75, 192, 192, 1)',
-                            'rgba(255, 99, 132, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
+            Highcharts.chart('feedbackChart', {
+                chart: {
+                    type: 'pie',
+                    marginBottom: 30
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false
+                title: {
+                    text: null
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        colors: ['#34A853', '#EA4335'],
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'ความคิดเห็น',
+                    colorByPoint: true,
+                    data: @json($feedbackDistribution['labels']).map((label, index) => ({
+                        name: label,
+                        y: @json($feedbackDistribution['data'])[index]
+                    }))
+                }],
+                credits: {
+                    enabled: false
                 }
             });
         });
