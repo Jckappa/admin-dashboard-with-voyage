@@ -117,10 +117,10 @@
                         label: 'จำนวนคนตามช่วงอายุ',
                         data: @json($ageGroups['data']),
                         backgroundColor: [
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(255, 159, 64, 0.6)',
-                            'rgba(153, 102, 255, 0.6)'
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
                         ],
                         borderColor: [
                             'rgba(54, 162, 235, 1)',
@@ -156,9 +156,9 @@
                     datasets: [{
                         data: @json($genderDistribution['data']),
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)'
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -183,7 +183,7 @@
                     datasets: [{
                         label: 'จำนวนคนตามอาชีพ',
                         data: @json($occupationDistribution['data']),
-                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
                         borderColor: 'rgba(75, 192, 192, 1)',
                         borderWidth: 1
                     }]
@@ -213,11 +213,11 @@
                     datasets: [{
                         data: @json($incomeDistribution['data']),
                         backgroundColor: [
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(153, 102, 255, 0.6)'
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
@@ -244,8 +244,8 @@
                     datasets: [{
                         data: @json($feedbackDistribution['data']),
                         backgroundColor: [
-                            'rgba(75, 192, 192, 0.6)',
-                            'rgba(255, 99, 132, 0.6)'
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(255, 99, 132, 0.8)'
                         ],
                         borderColor: [
                             'rgba(75, 192, 192, 1)',

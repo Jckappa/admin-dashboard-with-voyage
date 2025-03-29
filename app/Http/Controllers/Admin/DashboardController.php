@@ -4,41 +4,32 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Customer;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        // Read the CSV file
-        $csvPath = 'onlinefoods.csv';
-        $csvContent = Storage::get($csvPath);
-        $lines = explode(PHP_EOL, $csvContent);
+        // Get data from customers table
+        $customers = Customer::all()->toArray();
         
-        // Parse the CSV data
-        $header = null;
+        // Map database fields to match CSV column names for compatibility
         $data = [];
-        
-        foreach ($lines as $line) {
-            if (empty($line)) continue;
-            
-            $values = str_getcsv($line);
-            
-            if (!$header) {
-                $header = $values;
-                continue;
-            }
-            
-            $row = [];
-            foreach ($header as $i => $key) {
-                if (isset($values[$i])) {
-                    $row[$key] = $values[$i];
-                }
-            }
-            
-            if (!empty($row)) {
-                $data[] = $row;
-            }
+        foreach ($customers as $customer) {
+            $data[] = [
+                'Age' => $customer['age'],
+                'Gender' => $customer['gender'],
+                'Marital_Status' => $customer['marital_status'],
+                'Occupation' => $customer['occupation'],
+                'Monthly_Income' => $customer['monthly_income'],
+                'Educational_Qualifications' => $customer['educational_qualifications'],
+                'Family_size' => $customer['family_size'],
+                'latitude' => $customer['latitude'],
+                'longitude' => $customer['longitude'],
+                'Pin_code' => $customer['pin_code'],
+                'Output' => $customer['order_status'],
+                'Feedback' => $customer['feedback']
+            ];
         }
         
         // Prepare data for charts
