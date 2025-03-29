@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\ChartController;
 use TCG\Voyager\Facades\Voyager;
 
 /*
@@ -25,7 +24,4 @@ Route::group(['prefix' => 'admin'], function () {
     
     // เพิ่ม Route สำหรับ Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
-    // เพิ่ม Route สำหรับ Chart.js
-    Route::get('/charts', [ChartController::class, 'index'])->name('admin.charts');
 });
