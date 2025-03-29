@@ -4,28 +4,28 @@
     <style>
         .chart-container {
             position: relative;
-            height: 450px;
+            height: auto; /* Adjust height automatically */
             width: 100%;
-            margin-bottom: 40px;
+            margin-bottom: 20px; /* Reduce margin for better spacing */
             overflow: visible;
-            min-height: 450px;
+            min-height: 300px; /* Set a minimum height */
         }
         .chart-row {
             display: flex;
             flex-wrap: wrap;
-            margin: 0 -15px;
+            margin: 0 -10px; /* Adjust margin for better spacing */
         }
         .chart-col {
-            flex: 0 0 50%;
-            max-width: 50%;
-            padding: 0 15px;
-            margin-bottom: 30px;
+            flex: 0 0 100%; /* Make each chart take full width on smaller screens */
+            max-width: 100%;
+            padding: 0 10px; /* Adjust padding for better spacing */
+            margin-bottom: 20px; /* Reduce margin for better spacing */
         }
         .chart-card {
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            padding: 20px 20px 40px 20px;
+            padding: 20px;
             height: 100%;
         }
         .chart-title {
@@ -34,18 +34,10 @@
             margin-bottom: 15px;
             color: #333;
         }
-        .highcharts-container {
-            width: 100% !important;
-            height: 400px !important;
-            overflow: visible !important;
-        }
-        .highcharts-axis-labels {
-            overflow: visible !important;
-        }
-        @media (max-width: 768px) {
+        @media (min-width: 768px) {
             .chart-col {
-                flex: 0 0 100%;
-                max-width: 100%;
+                flex: 0 0 50%; /* Make each chart take half width on larger screens */
+                max-width: 50%;
             }
         }
     </style>
@@ -60,7 +52,7 @@
     <div class="chart-row">
         <div class="chart-col">
             <div class="chart-card">
-                <div class="chart-title">การกระจายตามช่วงอายุ</div>
+                <div class="chart-title">กราฟลูกค้าตามช่วงอายุ</div>
                 <div class="chart-container" id="ageChart"></div>
             </div>
         </div>
