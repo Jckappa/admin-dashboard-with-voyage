@@ -11,7 +11,7 @@ Before starting, ensure you have the following installed on your system:
 
 ## Step 1: Clone the Project from Repository
 ```bash
-git clone <your-repository-url> my-admin-dashboard
+git clone https://github.com/Jckappa/admin-dashboard-with-voyage.git
 cd my-admin-dashboard
 ```
 
